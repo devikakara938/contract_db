@@ -11,42 +11,56 @@ from alembic import context
 # --------------------------------------------------
 # Add backend folder to Python path
 # --------------------------------------------------
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BACKEND_DIR = os.path.join(BASE_DIR, "backend")
 
-sys.path.insert(0, BACKEND_DIR)
+BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
 
 
 # --------------------------------------------------
-# Import SQLAlchemy Base
+# Import database Base
 # --------------------------------------------------
+
 from app.database import Base
 
 
 # --------------------------------------------------
-# Alembic Config
+# Import models
+# IMPORTANT: models must be imported before
+# Base.metadata is used
 # --------------------------------------------------
+
+from app.models.user import User
+
+
+# --------------------------------------------------
+# Alembic Config object
+# --------------------------------------------------
+
 config = context.config
 
 
 # --------------------------------------------------
 # Logging configuration
 # --------------------------------------------------
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
 
 # --------------------------------------------------
-# Metadata for autogenerate
+# Target metadata
 # --------------------------------------------------
+
 target_metadata = Base.metadata
 
 
 # --------------------------------------------------
-# Offline migrations
+# Offline migration
 # --------------------------------------------------
+
 def run_migrations_offline() -> None:
-    """Run migrations in 'offline' mode."""
 
     url = config.get_main_option("sqlalchemy.url")
 
@@ -54,7 +68,9 @@ def run_migrations_offline() -> None:
         url=url,
         target_metadata=target_metadata,
         literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
+        dialect_opts={
+            "paramstyle": "named"
+        },
     )
 
     with context.begin_transaction():
@@ -62,10 +78,10 @@ def run_migrations_offline() -> None:
 
 
 # --------------------------------------------------
-# Online migrations
+# Online migration
 # --------------------------------------------------
+
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
 
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
@@ -85,9 +101,13 @@ def run_migrations_online() -> None:
 
 
 # --------------------------------------------------
-# Run migration
+# Run migrations
 # --------------------------------------------------
+
 if context.is_offline_mode():
+
     run_migrations_offline()
+
 else:
+
     run_migrations_online()
