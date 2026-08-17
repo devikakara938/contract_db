@@ -22,7 +22,7 @@ if BACKEND_DIR not in sys.path:
 # Import database Base
 # --------------------------------------------------
 
-from app.database import Base
+from backend.app.database import Base
 
 
 # --------------------------------------------------
@@ -31,7 +31,7 @@ from app.database import Base
 # Base.metadata is used
 # --------------------------------------------------
 
-from app.models.user import User
+from backend.app import models
 
 
 # --------------------------------------------------

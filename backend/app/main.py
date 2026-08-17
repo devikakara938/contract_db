@@ -1,9 +1,7 @@
 from fastapi import FastAPI
 
 from backend.app.api import user
-from backend.app.database import engine, Base
-from backend.app.models.user import User
-
+from backend.app.api import contracts
 
 
 app = FastAPI(
@@ -15,6 +13,13 @@ app.include_router(
     user.router,
     prefix="/users",
     tags=["Users"]
+)
+
+
+app.include_router(
+    contracts.router,
+    prefix="/contracts",
+    tags=["Contracts"]
 )
 
 
